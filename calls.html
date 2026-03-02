@@ -61,15 +61,14 @@
     </div>
 
     <script>
-        firebase.initializeApp({
-           
-         apiKey: "AIzaSyC8VwTY2i3kS41iy7FI_3ijCOFLV6LIwoA",
-  authDomain: "action-az.firebaseapp.com",
-  projectId: "action-az",
-  storageBucket: "action-az.firebasestorage.app",
-  messagingSenderId: "40939226263",
-  appId: "1:40939226263:web:4cfc491a1e8008e86f55d2"
-};
+firebase.initializeApp({
+    apiKey: "AIzaSyC8VwTY2i3kS41iy7FI_3ijCOFLV6LIwoA",
+    authDomain: "action-az.firebaseapp.com",
+    projectId: "action-az",
+    storageBucket: "action-az.firebasestorage.app",
+    messagingSenderId: "40939226263",
+    appId: "1:40939226263:web:4cfc491a1e8008e86f55d2"
+});
         const db = firebase.database();
         const selected = localStorage.getItem('selectedPerson');
         let currentDate = new Date();
