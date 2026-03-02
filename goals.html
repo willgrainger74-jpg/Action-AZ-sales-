@@ -339,35 +339,48 @@
             window.location.href = 'index.html';
         }
 
-        db.ref('salespeople').on('value', snapshot => {
-            const data = snapshot.val();
-            people = data ? Object.keys(data).map(k => ({ id: k, name: data[k].name })) : [];
-            const person = people.find(p => p.id === selected);
-            if (person) {
-                document.getElementById('personName').textContent = `Performance for: ${person.name}`;
-            }
-            renderAll();
-        });
+        let dataReady = { people: false, logs: false, weekly: false, monthly: false, yearly: false };
 
-        db.ref('callLogs').on('value', snapshot => {
-            logs = snapshot.val() || {};
-            renderAll();
-        });
+function tryRender() {
+    if (Object.values(dataReady).every(Boolean)) {
+        loadGoals();
+    }
+}
 
-        db.ref('weeklyGoals').on('value', snapshot => {
-            weeklyGoals = snapshot.val() || {};
-            renderAll();
-        });
+db.ref('salespeople').on('value', snapshot => {
+    const data = snapshot.val();
+    people = data ? Object.keys(data).map(k => ({ id: k, name: data[k].name })) : [];
+    const person = people.find(p => p.id === selected);
+    if (person) {
+        document.getElementById('personName').textContent = `Performance for: ${person.name}`;
+    }
+    dataReady.people = true;
+    tryRender();
+});
 
-        db.ref('monthlyGoals').on('value', snapshot => {
-            monthlyGoals = snapshot.val() || {};
-            renderAll();
-        });
+db.ref('callLogs').on('value', snapshot => {
+    logs = snapshot.val() || {};
+    dataReady.logs = true;
+    tryRender();
+});
 
-        db.ref('yearlyGoals').on('value', snapshot => {
-            yearlyGoals = snapshot.val() || {};
-            renderAll();
-        });
+db.ref('weeklyGoals').on('value', snapshot => {
+    weeklyGoals = snapshot.val() || {};
+    dataReady.weekly = true;
+    tryRender();
+});
+
+db.ref('monthlyGoals').on('value', snapshot => {
+    monthlyGoals = snapshot.val() || {};
+    dataReady.monthly = true;
+    tryRender();
+});
+
+db.ref('yearlyGoals').on('value', snapshot => {
+    yearlyGoals = snapshot.val() || {};
+    dataReady.yearly = true;
+    tryRender();
+});
 
         const dk = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
         const wk = d => {
